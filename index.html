@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026-27 FA Projected AAV by Outlet</title>
+<meta name="description" content="2026-27 MLB free agent AAV projections compared across FanGraphs (Ben Clemens), MLB Trade Rumors, ESPN (Kiley McDaniel), and The Athletic (Keith Law).">
+<meta property="og:title" content="2026-27 FA Projected AAV by Outlet">
+<meta property="og:description" content="How much the outlets disagree on every free agent's average annual value.">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#f5f2ed; font-family:'Hanken Grotesk',sans-serif; color:#1a1a1a; padding:26px; min-width:680px; }
+  .card { width:100%; max-width:1760px; background:#ffffff; border-radius:22px; margin:0 auto;
+          box-shadow:0 2px 14px rgba(20,18,12,.07), 0 1px 3px rgba(20,18,12,.05); padding:30px 36px 26px 36px;
+          opacity:0; animation:cardIn .7s cubic-bezier(0.34,1.4,0.64,1) .05s forwards; }
+  @keyframes cardIn { from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:none;} }
+  .hdr { display:flex; justify-content:space-between; align-items:flex-start; gap:18px; flex-wrap:wrap; }
+  h1 { font-size:27px; font-weight:800; letter-spacing:-0.4px; }
+  .sub { font-size:14px; color:#7a776f; margin-top:5px; font-weight:500; }
+  .legend { display:flex; gap:10px; align-items:center; margin-top:18px; flex-wrap:wrap; }
+  .leg { display:flex; align-items:center; gap:7px; font-size:13px; font-weight:600; color:#3a3832;
+         opacity:0; animation:fadeIn .5s ease forwards; white-space:nowrap;
+         padding:6px 13px; border-radius:99px; border:1.5px solid transparent; cursor:default; transition:all .15s ease; }
+  .leg:hover { background:#fbfaf7; border-color:#e2dfd6; }
+  svg.hl .mk { opacity:.12; transition:opacity .15s ease; }
+  svg.hl.hl-bc .mk.src-bc, svg.hl.hl-mt .mk.src-mt, svg.hl.hl-es .mk.src-es, svg.hl.hl-law .mk.src-law { opacity:1; }
+  .mk { transition:opacity .15s ease; }
+  .leg:nth-child(1){animation-delay:.3s}.leg:nth-child(2){animation-delay:.4s}.leg:nth-child(3){animation-delay:.5s}.leg:nth-child(4){animation-delay:.6s}
+  @keyframes fadeIn { to{opacity:1;} }
+  .sw { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+  .sw-sq { width:11px; height:11px; border-radius:3px; flex-shrink:0; }
+  .sw-tr { width:0; height:0; border-left:7px solid transparent; border-right:7px solid transparent; border-bottom:12px solid; flex-shrink:0; }
+  .swd { width:11px; height:11px; transform:rotate(45deg); border-radius:2.5px; flex-shrink:0; }
+  .stats { border:1.5px solid #eceae2; background:#fbfaf7; border-radius:14px; padding:12px 16px; min-width:242px;
+           opacity:0; animation:fadeIn .5s ease .5s forwards; }
+  .st-title { font-size:11.5px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; color:#8a877e; line-height:1.35; margin-bottom:8px; }
+  .st-title span { font-weight:600; text-transform:none; letter-spacing:0; color:#aaa79d; }
+  .st-row { display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:#3a3832; padding:3.5px 0; cursor:default; }
+  .st-row .nm { flex:1; }
+  .st-row .avg { color:#8a877e; font-weight:600; font-size:12px; }
+  .st-row .dl { font-weight:800; min-width:52px; text-align:right; font-variant-numeric:tabular-nums; }
+  .note { font-size:12px; color:#9c998f; font-weight:500; margin-top:5px; }
+  .toggles { display:flex; gap:8px; margin-top:14px; }
+  .tg { font-family:inherit; font-size:13.5px; font-weight:700; padding:7px 18px; border-radius:99px; border:1.5px solid #e2dfd6;
+        background:#fbfaf7; color:#6b685f; cursor:pointer; transition:all .18s ease; }
+  .tg:hover { border-color:#c9c5b8; color:#1a1a1a; }
+  .tg.on { background:#1a1a1a; border-color:#1a1a1a; color:#fff; }
+  .tg .ct { font-weight:600; opacity:.55; margin-left:4px; }
+  svg { display:block; margin-top:6px; width:100%; }
+  .row { opacity:0; animation:rowIn .5s cubic-bezier(0.34,1.45,0.64,1) forwards; }
+  .noanim .row { animation:none; opacity:1; }
+  @keyframes rowIn { from{opacity:0; transform:translateX(-16px);} to{opacity:1; transform:none;} }
+  .pname { font-size:13.5px; font-weight:700; fill:#1a1a1a; }
+  .ppos { font-size:11px; font-weight:600; fill:#9c998f; }
+  .mval { font-size:11.5px; font-weight:700; fill:#8a877e; }
+  .tick { font-size:12px; font-weight:600; fill:#898781; }
+  .foot { margin-top:12px; font-size:12px; color:#8a877e; font-weight:500; display:flex; justify-content:flex-end; }
+  #tip { position:fixed; display:none; background:#1a1a1a; color:#fff; border-radius:10px; padding:9px 12px; font-size:12.5px;
+         pointer-events:none; z-index:10; box-shadow:0 6px 20px rgba(0,0,0,.25); line-height:1.45; }
+  #tip b { font-size:13.5px; } #tip .dim { color:#b9b6ac; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="hdr">
+    <div>
+      <h1>2026&ndash;27 Free Agents: Projected AAV by Outlet</h1>
+      <div class="note">Law numbers parsed from his blurb estimates: midpoint of any range; &ldquo;at least&rdquo; figures kept as floors.</div>
+      <div class="toggles">
+        <button class="tg on" data-k="A">All <span class="ct"></span></button>
+        <button class="tg" data-k="H">Position players <span class="ct"></span></button>
+        <button class="tg" data-k="P">Pitchers <span class="ct"></span></button>
+      </div>
+    </div>
+    <div class="stats" id="stats">
+      <div class="st-title">Avg AAV vs. the other outlets<br><span>same players, shown selection</span></div>
+      <div id="st-rows"></div>
+    </div>
+  </div>
+  <div class="legend" id="legend">
+    <div class="leg" data-s="bc"><span class="sw" style="background:#2a78d6"></span>Ben Clemens &middot; FanGraphs</div>
+    <div class="leg" data-s="mt"><span class="sw-sq" style="background:#eb6834"></span>MLB Trade Rumors</div>
+    <div class="leg" data-s="es"><span class="sw-tr" style="border-bottom-color:#1baf7a"></span>Kiley McDaniel &middot; ESPN</div>
+    <div class="leg" data-s="law"><span class="swd" style="background:#824a85"></span><span style="margin-left:2px">Keith Law &middot; The Athletic</span></div>
+  </div>
+  <svg id="chart"></svg>
+  <div class="foot">
+    <span>FanGraphs Top 50 (11/2) &middot; ESPN (11/3) &middot; The Athletic (11/2) &middot; MLBTR (11/2026)</span>
+  </div>
+</div>
+<div id="tip"></div>
+<script>
+const DATA = [{"p":"Tarik Skubal","pos":"SP","kind":"P","bc":[10.0,38.0,380.0],"es":[8.0,44.0,352.0],"law":[5.0,43.0,215.0],"mt":[9.0,47.22,425.0],"fl":1,"mean":43.05,"rng":9.22},{"p":"Seiya Suzuki","pos":"OF","kind":"H","bc":[4.0,27.0,108.0],"es":[4.0,22.5,90.0],"law":[5.0,29.0,145.0],"mt":[4.0,26.25,105.0],"fl":0,"mean":26.19,"rng":6.5},{"p":"Michael King","pos":"SP","kind":"P","bc":[4.0,25.0,100.0],"es":[3.0,26.5,79.5],"law":[3.0,30.0,90.0],"mt":[4.0,23.0,92.0],"fl":0,"mean":26.12,"rng":7.0},{"p":"Sonny Gray","pos":"SP","kind":"P","bc":[1.0,25.0,25.0],"es":[2.0,21.0,42.0],"law":[2.0,30.0,60.0],"mt":[2.0,27.5,55.0],"fl":0,"mean":25.88,"rng":9.0},{"p":"Randy Arozarena","pos":"OF","kind":"H","bc":[3.0,23.0,69.0],"es":[4.0,22.5,90.0],"law":[3.0,30.0,90.0],"mt":[4.0,25.0,100.0],"fl":0,"mean":25.12,"rng":7.5},{"p":"Freddy Peralta","pos":"SP","kind":"P","bc":[4.0,23.0,92.0],"es":[4.0,24.0,96.0],"law":[4.0,30.0,120.0],"mt":[5.0,22.0,110.0],"fl":0,"mean":24.75,"rng":8.0},{"p":"Trevor Rogers","pos":"SP","kind":"P","bc":[4.0,26.0,104.0],"es":[4.0,19.0,76.0],"law":[3.0,25.0,75.0],"mt":[5.0,23.0,115.0],"fl":0,"mean":23.25,"rng":7.0},{"p":"Brandon Lowe","pos":"2B","kind":"H","bc":[2.0,19.0,38.0],"es":[4.0,20.0,80.0],"law":[5.0,30.0,150.0],"mt":[3.0,23.0,69.0],"fl":0,"mean":23.0,"rng":11.0},{"p":"Jazz Chisholm Jr.","pos":"2B","kind":"H","bc":[4.0,23.0,92.0],"es":[2.0,23.0,46.0],"law":[1.0,20.0,20.0],"mt":[2.0,20.0,40.0],"fl":0,"mean":21.5,"rng":3.0},{"p":"Teruaki Sato","pos":"3B/RF","kind":"H","bc":[5.0,22.0,110.0],"es":[5.0,23.0,115.0],"law":[4.5,25.0,112.5],"mt":[5.0,16.0,80.0],"fl":0,"mean":21.5,"rng":9.0},{"p":"Jake Bauers","pos":"1B","kind":"H","bc":[2.0,19.0,38.0],"es":[3.0,17.5,52.5],"law":[4.0,23.75,95.0],"mt":[1.0,23.15,23.15],"fl":0,"mean":20.85,"rng":6.25},{"p":"Clay Holmes","pos":"SP","kind":"P","bc":[2.0,20.0,40.0],"es":[2.0,17.5,35.0],"law":[4.0,30.0,120.0],"mt":[3.0,15.0,45.0],"fl":0,"mean":20.62,"rng":15.0},{"p":"Luis Arraez","pos":"2B","kind":"H","bc":[2.0,19.0,38.0],"es":[3.0,18.0,54.0],"law":[4.0,27.5,110.0],"mt":[3.0,16.0,48.0],"fl":0,"mean":20.12,"rng":11.5},{"p":"Adrian Morejon","pos":"RP","kind":"P","bc":[3.0,24.0,72.0],"es":[4.0,22.0,88.0],"law":[3.0,15.0,45.0],"mt":[5.0,16.0,80.0],"fl":0,"mean":19.25,"rng":9.0},{"p":"Kevin Gausman","pos":"SP","kind":"P","bc":[1.0,17.0,17.0],"es":[3.0,17.0,51.0],"law":null,"mt":[2.0,22.0,44.0],"fl":0,"mean":18.67,"rng":5.0},{"p":"Shota Imanaga","pos":"SP","kind":"P","bc":[2.0,14.0,28.0],"es":[2.0,20.0,40.0],"law":[2.0,20.0,40.0],"mt":[2.0,20.0,40.0],"fl":0,"mean":18.5,"rng":6.0},{"p":"Nick Martinez","pos":"SP","kind":"P","bc":[2.0,15.0,30.0],"es":[1.0,17.5,17.5],"law":[1.0,20.0,20.0],"mt":[2.0,21.0,42.0],"fl":0,"mean":18.38,"rng":6.0},{"p":"Ian Happ","pos":"OF","kind":"H","bc":[2.0,15.0,30.0],"es":[3.0,16.0,48.0],"law":[4.0,25.0,100.0],"mt":[3.0,15.0,45.0],"fl":0,"mean":17.75,"rng":10.0},{"p":"David Bednar","pos":"RP","kind":"P","bc":[3.0,16.0,48.0],"es":[3.0,20.0,60.0],"law":[3.0,16.7,50.0],"mt":[4.0,17.0,68.0],"fl":0,"mean":17.43,"rng":4.0},{"p":"Kaima Taira","pos":"SP","kind":"P","bc":[3.0,16.0,48.0],"es":[5.0,14.5,72.5],"law":[3.0,18.0,54.0],"mt":[4.0,18.0,72.0],"fl":1,"mean":16.62,"rng":3.5},{"p":"Ryan Jeffers","pos":"C","kind":"H","bc":[2.0,15.0,30.0],"es":[3.0,17.0,51.0],"law":[3.0,15.0,45.0],"mt":[4.0,18.75,75.0],"fl":1,"mean":16.44,"rng":3.75},{"p":"Foster Griffin","pos":"SP","kind":"P","bc":[1.0,14.0,14.0],"es":[2.0,15.0,30.0],"law":[null,22.5,null],"mt":[3.0,13.0,39.0],"fl":0,"mean":16.12,"rng":9.5},{"p":"Nick Pivetta","pos":"SP","kind":"P","bc":null,"es":[3.0,15.0,45.0],"law":[1.0,20.0,20.0],"mt":[2.0,13.0,26.0],"fl":0,"mean":16.0,"rng":7.0},{"p":"Casey Mize","pos":"SP","kind":"P","bc":[2.0,17.0,34.0],"es":[1.0,15.0,15.0],"law":[1.0,17.5,17.5],"mt":[2.0,14.0,28.0],"fl":0,"mean":15.88,"rng":3.5},{"p":"Tyler Mahle","pos":"SP","kind":"P","bc":[2.0,15.0,30.0],"es":[3.0,16.5,49.5],"law":[1.0,11.0,11.0],"mt":[3.0,18.0,54.0],"fl":0,"mean":15.12,"rng":7.0},{"p":"Ty France","pos":"1B","kind":"H","bc":[1.0,13.0,13.0],"es":[1.0,13.0,13.0],"law":[2.0,17.5,35.0],"mt":[2.0,16.0,32.0],"fl":0,"mean":14.88,"rng":4.5},{"p":"Raisel Iglesias","pos":"RP","kind":"P","bc":[1.0,13.0,13.0],"es":[1.0,14.0,14.0],"law":null,"mt":[1.0,17.0,17.0],"fl":0,"mean":14.67,"rng":4.0},{"p":"Dustin May","pos":"SP","kind":"P","bc":[2.0,15.0,30.0],"es":[1.0,14.0,14.0],"law":null,"mt":[2.0,15.0,30.0],"fl":0,"mean":14.67,"rng":1.0},{"p":"Taylor Ward","pos":"OF","kind":"H","bc":null,"es":[2.0,14.0,28.0],"law":[1.0,17.5,17.5],"mt":[1.0,12.0,12.0],"fl":0,"mean":14.5,"rng":5.5},{"p":"Michael Soroka","pos":"SP","kind":"P","bc":[2.0,17.0,34.0],"es":[2.0,12.0,24.0],"law":null,"mt":[2.0,13.0,26.0],"fl":0,"mean":14.0,"rng":5.0},{"p":"Daulton Varsho","pos":"OF","kind":"H","bc":[1.0,14.0,14.0],"es":[1.0,15.0,15.0],"law":[1.0,13.5,13.5],"mt":[2.0,10.0,20.0],"fl":0,"mean":13.12,"rng":5.0},{"p":"Kris Bubic","pos":"SP","kind":"P","bc":[2.0,17.0,34.0],"es":[2.0,9.0,18.0],"law":null,"mt":[1.0,12.5,12.5],"fl":0,"mean":12.83,"rng":8.0},{"p":"Luis Robert Jr.","pos":"OF","kind":"H","bc":[1.0,14.0,14.0],"es":[1.0,10.5,10.5],"law":null,"mt":[1.0,14.0,14.0],"fl":0,"mean":12.83,"rng":3.5},{"p":"Gleyber Torres","pos":"2B","kind":"H","bc":[2.0,14.0,28.0],"es":[1.0,12.5,12.5],"law":[1.0,9.0,9.0],"mt":null,"fl":0,"mean":11.83,"rng":5.0},{"p":"Matthew Boyd","pos":"SP","kind":"P","bc":[1.0,9.0,9.0],"es":[1.0,10.0,10.0],"law":[1.0,15.0,15.0],"mt":[1.0,13.0,13.0],"fl":0,"mean":11.75,"rng":6.0},{"p":"Alex Vesia","pos":"RP","kind":"P","bc":[2.0,9.0,18.0],"es":[2.0,12.5,25.0],"law":null,"mt":[2.0,13.0,26.0],"fl":0,"mean":11.5,"rng":4.0},{"p":"David Peterson","pos":"SP","kind":"P","bc":[1.0,13.0,13.0],"es":[1.0,11.0,11.0],"law":[1.0,9.5,9.5],"mt":[2.0,12.0,24.0],"fl":0,"mean":11.38,"rng":3.5},{"p":"Mauricio Dubon","pos":"UTIL","kind":"H","bc":[1.0,8.0,8.0],"es":[2.0,8.0,16.0],"law":[3.0,18.33,55.0],"mt":[2.0,9.0,18.0],"fl":0,"mean":10.83,"rng":10.33},{"p":"Hiromi Itoh","pos":"SP","kind":"P","bc":[3.0,11.0,33.0],"es":[2.0,9.0,18.0],"law":[1.0,11.0,11.0],"mt":[2.0,10.0,20.0],"fl":0,"mean":10.25,"rng":2.0},{"p":"Bryan Abreu","pos":"RP","kind":"P","bc":[2.0,9.0,18.0],"es":[1.0,10.5,10.5],"law":null,"mt":[2.0,11.0,22.0],"fl":0,"mean":10.17,"rng":2.0},{"p":"Jonathan Loaisiga","pos":"RP","kind":"P","bc":[2.0,12.0,24.0],"es":[2.0,11.0,22.0],"law":null,"mt":[2.0,6.5,13.0],"fl":0,"mean":9.83,"rng":5.5},{"p":"Tyler Stephenson","pos":"C","kind":"H","bc":[1.0,10.0,10.0],"es":[1.0,10.5,10.5],"law":[2.0,10.0,20.0],"mt":[2.0,7.5,15.0],"fl":0,"mean":9.5,"rng":3.0},{"p":"J.P. Crawford","pos":"SS","kind":"H","bc":[1.0,8.0,8.0],"es":[1.0,11.0,11.0],"law":[1.0,11.0,11.0],"mt":[2.0,8.0,16.0],"fl":0,"mean":9.5,"rng":3.0},{"p":"Carson Kelly","pos":"C","kind":"H","bc":[1.0,10.0,10.0],"es":[2.0,8.5,17.0],"law":[2.0,9.0,18.0],"mt":[2.0,10.0,20.0],"fl":0,"mean":9.38,"rng":1.5}];
+const svg = document.getElementById('chart');
+const NS = 'http://www.w3.org/2000/svg';
+const TOP=30, ROWH=26, NAMEW=236, MEANW=124;
+const XMAX=48;
+const SRC = [
+  {k:'bc', name:'Ben Clemens (FanGraphs)', c:'#2a78d6', s:'#1c5cab', shape:'circle'},
+  {k:'mt', name:'MLB Trade Rumors', c:'#eb6834', s:'#b4431c', shape:'square'},
+  {k:'es', name:'Kiley McDaniel (ESPN)', c:'#1baf7a', s:'#0e7a53', shape:'triangle'},
+  {k:'law', name:'Keith Law (The Athletic)', c:'#824a85', s:'#5d3260', shape:'diamond'},
+];
+const tip=document.getElementById('tip');
+let curKind='A';
+function el(t,a={},parent=svg){ const e=document.createElementNS(NS,t); for(const k in a) e.setAttribute(k,a[k]); parent.appendChild(e); return e; }
+
+function render(kind, animate=true){
+  curKind=kind;
+  svg.innerHTML='';
+  svg.classList.toggle('noanim', !animate);
+  const W = svg.clientWidth || svg.parentElement.clientWidth - 72;
+  const L = NAMEW, R = W - MEANW;
+  const x = v => L + v/XMAX*(R-L);
+  const rows = DATA.filter(d => kind==='A' || d.kind===kind);
+  const H = TOP + rows.length*ROWH + 12;
+  svg.setAttribute('height', H);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  for(let v=0; v<=XMAX-1; v+=5){
+    el('line',{x1:x(v),x2:x(v),y1:TOP-6,y2:H-12,stroke: v%10==0 ? '#e4e1d8':'#efede6','stroke-width':1});
+    if(v%10==0){ const t=el('text',{x:x(v),y:TOP-14,'text-anchor':'middle',class:'tick'}); t.textContent = v==0 ? '$0':'$'+v+'M'; }
+  }
+  const h1=el('text',{x:R+16,y:TOP-14,class:'tick'}); h1.textContent='Avg AAV';
+  const h2=el('text',{x:R+78,y:TOP-14,class:'tick'}); h2.textContent='SD';
+  rows.forEach((d,i)=>{
+    const cy = TOP + ROWH*(i+0.5);
+    const g = el('g',{class:'row'});
+    if(animate) g.style.animationDelay = (0.08 + i*0.018)+'s';
+    if(i%2==0) el('rect',{x:0,y:cy-ROWH/2,width:W,height:ROWH,fill:'#faf8f3',rx:4},g);
+    const nm=el('text',{x:NAMEW-74,y:cy+4.5,'text-anchor':'end',class:'pname'},g); nm.textContent=d.p;
+    const ps=el('text',{x:NAMEW-66,y:cy+4,class:'ppos'},g); ps.textContent=d.pos;
+    const pts = SRC.filter(s=>d[s.k]&&d[s.k][1]!=null).map(s=>({s, v:d[s.k]}));
+    const vals = pts.map(pt=>pt.v[1]);
+    el('line',{x1:x(Math.min(...vals)),x2:x(Math.max(...vals)),y1:cy,y2:cy,stroke:'#d9d5ca','stroke-width':3,'stroke-linecap':'round'},g);
+    const mv=el('text',{x:R+16,y:cy+4,class:'mval'},g); mv.textContent='$'+d.mean.toFixed(1)+'M';
+    const mu=vals.reduce((a,b)=>a+b,0)/vals.length;
+    const sd=Math.sqrt(vals.reduce((a,b)=>a+(b-mu)*(b-mu),0)/vals.length);
+    const sv=el('text',{x:R+78,y:cy+4,class:'mval',opacity:.8},g); sv.textContent='$'+sd.toFixed(1);
+    // group near-ties and dodge HORIZONTALLY, side by side around the true value
+    pts.sort((a,b)=>a.v[1]-b.v[1]);
+    const groups=[];
+    pts.forEach(pt=>{
+      const gLast=groups[groups.length-1];
+      if(gLast && x(pt.v[1]) - x(gLast[gLast.length-1].v[1]) < 12) gLast.push(pt);
+      else groups.push([pt]);
+    });
+    const placed=[];
+    groups.forEach(grp=>{
+      const baseX = x(grp.reduce((a,p)=>a+p.v[1],0)/grp.length);
+      grp.forEach((pt,j)=>{
+        placed.push({pt, cx: baseX + (j-(grp.length-1)/2)*13.5});
+      });
+    });
+    placed.forEach(({pt,cx})=>{
+      const yy=cy;
+      const mg = el('g',{class:'mk src-'+pt.s.k},g);
+      const base={fill:pt.s.c};
+      if(pt.s.shape==='diamond'){
+        el('rect',{x:cx-5.6,y:yy-5.6,width:11.2,height:11.2,rx:2.2,...base,transform:`rotate(45 ${cx} ${yy})`},mg);
+      } else if(pt.s.shape==='square'){
+        el('rect',{x:cx-5.3,y:yy-5.3,width:10.6,height:10.6,rx:2,...base},mg);
+      } else if(pt.s.shape==='triangle'){
+        el('path',{d:`M ${cx} ${yy-6.9} L ${cx+6.4} ${yy+5.1} L ${cx-6.4} ${yy+5.1} Z`,'stroke-linejoin':'round',...base},mg);
+      } else {
+        el('circle',{cx:cx,cy:yy,r:6,...base},mg);
+      }
+      const hit=el('circle',{cx:cx,cy:yy,r:10,fill:'transparent'},mg);
+      hit.style.cursor='pointer';
+      hit.addEventListener('mousemove',ev=>{
+        const [yrs,aav,tot]=pt.v;
+        tip.style.display='block';
+        tip.innerHTML=`<b>${d.p}</b> <span class="dim">${d.pos}</span><br><span style="font-weight:700;color:${pt.s.k==='law'?'#d9a9dc':pt.s.c}">${pt.s.name}</span><br>${yrs!=null?yrs+' yr'+(yrs!=1?'s':''):'yrs n/a'} &middot; <b>$${aav}M AAV</b>${tot!=null?' &middot; $'+tot+'M total':''}${d.fl&&pt.s.k==='law'?'<br><span class="dim">stated as a floor</span>':''}`;
+        tip.style.left=Math.min(ev.clientX+16, window.innerWidth-240)+'px'; tip.style.top=(ev.clientY-10)+'px';
+      });
+      hit.addEventListener('mouseleave',()=>{ tip.style.display='none'; });
+    });
+  });
+}
+function renderStats(kind){
+  const rows = DATA.filter(d => kind==='A' || d.kind===kind);
+  const names={bc:'Clemens',mt:'MLBTR',es:'McDaniel',law:'Law'};
+  const res = SRC.map(s=>{
+    let ds=[], as=[];
+    rows.forEach(d=>{
+      if(d[s.k] && d[s.k][1]!=null){
+        as.push(d[s.k][1]);
+        const o = SRC.filter(t=>t.k!==s.k && d[t.k] && d[t.k][1]!=null).map(t=>d[t.k][1]);
+        if(o.length) ds.push(d[s.k][1] - o.reduce((a,b)=>a+b,0)/o.length);
+      }
+    });
+    return {s, avg: as.reduce((a,b)=>a+b,0)/as.length, dl: ds.reduce((a,b)=>a+b,0)/ds.length};
+  }).sort((a,b)=>b.dl-a.dl);
+  document.getElementById('st-rows').innerHTML = res.map(r=>{
+    const sw = r.s.shape==='diamond' ? `<span class="swd" style="background:${r.s.c}"></span>`
+      : r.s.shape==='square' ? `<span class="sw-sq" style="background:${r.s.c}"></span>`
+      : r.s.shape==='triangle' ? `<span class="sw-tr" style="border-bottom-color:${r.s.c}"></span>`
+      : `<span class="sw" style="background:${r.s.c}"></span>`;
+    const sign = r.dl>=0?'+':'&minus;';
+    return `<div class="st-row" data-s="${r.s.k}">${sw}<span class="nm">${names[r.s.k]}</span><span class="avg">$${r.avg.toFixed(1)}M avg</span><span class="dl">${sign}$${Math.abs(r.dl).toFixed(1)}M</span></div>`;
+  }).join('');
+  document.querySelectorAll('.st-row').forEach(rw=>{
+    rw.addEventListener('mouseenter',()=>{ svg.classList.add('hl','hl-'+rw.dataset.s); });
+    rw.addEventListener('mouseleave',()=>{ svg.className.baseVal=''; });
+  });
+}
+const counts={A:DATA.length,H:DATA.filter(d=>d.kind==='H').length,P:DATA.filter(d=>d.kind==='P').length};
+document.querySelectorAll('.tg').forEach(b=>{
+  b.querySelector('.ct').textContent=counts[b.dataset.k];
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.tg').forEach(o=>o.classList.remove('on'));
+    b.classList.add('on');
+    render(b.dataset.k, true);
+  });
+});
+document.querySelectorAll('.leg').forEach(lg=>{
+  lg.addEventListener('mouseenter',()=>{ svg.classList.add('hl','hl-'+lg.dataset.s); });
+  lg.addEventListener('mouseleave',()=>{ svg.className.baseVal=''; svg.classList.toggle('noanim', false); });
+});
+let rz;
+window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>render(curKind,false),120); });
+const _render=render;
+render=function(kind,animate=true){ _render(kind,animate); renderStats(kind); };
+render('A', true);
+</script>
+</body>
+</html>
